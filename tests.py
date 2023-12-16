@@ -23,13 +23,22 @@ class Tests(unittest.TestCase):
         m1.break_entrance_and_exit()
         i = len(m1._cells) - 1
         j = len(m1._cells[0]) - 1 
-       
- 
-        self.assertEqual(m1._cells[0][0].has_bottom_wall, False)
-        self.assertEqual(m1._cells[i][j].has_top_wall, False)
         
-    def test_reset_cells():
-    win = Window()
+        self.assertEqual(m1._cells[0][0].has_top_wall, False)
+        self.assertEqual(m1._cells[i][j].has_bottom_wall, False)
+        
+    def test_reset_cells(self):
+        win = Window(100,100)
+        m1 = Maze(0,0,10,10,10,10, win)
+        m1._create_cells()
+        for row in m1._cells:
+            for cell in row:
+                cell.visited = True
+        m1._reset_cells_visited()
+        for row in m1._cells:
+            for cell in row:
+                self.assertEqual(cell.visited, False)
+
 if __name__ == "__main__":
     unittest.main()
 

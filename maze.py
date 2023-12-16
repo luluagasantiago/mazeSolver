@@ -51,7 +51,7 @@ class Maze():
     
     def _animate(self):
        self.win.redraw()
-       time.sleep(0.05)
+       time.sleep(0.01)
 
     
     def break_entrance_and_exit(self):
@@ -60,11 +60,12 @@ class Maze():
         
         self.open_top(0,0)
         self.open_bottom(i,j)
-    
-    def _break_walls_r(self, i, j):
+    count = 0    
+    def _break_walls_r(self, i, j, count=0):
         self._cells[i][j].visited = True 
         while True: 
             to_visit = []
+            self._animate()
             if i + 1 < self.num_rows:
                 if not self._cells[i+1][j].visited: 
                     to_visit.append((i+1,j))
@@ -92,7 +93,7 @@ class Maze():
                     self.open_left(i,j)
                 else:
                     self.open_right(i, j)
-            
+           
             self._break_walls_r(direction[0], direction[1])
        
     
@@ -117,20 +118,22 @@ class Maze():
 
 
     def _reset_cells_visited(self):
-        for row in len(self._cells):
-            for column in len(row):
-                self._cells[row][colum].visited = False
+        for row in self._cells:
+            for cell in row:
+                cell.visited = False
                     
 
 def main():
     win = Window(800, 600)
-    m = Maze(100,100, 10, 10, 50, 50,win,seed = 140  )
+    m = Maze(100,100, 10, 10, 50, 50,win )
     m._create_cells()
     for i in range(10):
         for j in range(10):
             m._draw_cell(i,j)
     m.break_entrance_and_exit()
     m._break_walls_r(0,0)
+    m._reset_cells_visited()
+    m.win.redraw()
     win.wait_for_close()
 
 
