@@ -14,7 +14,8 @@ class Maze():
                 win = None,
                 seed = None
     ):
-    # x1,y1 is the starting poing to draw the cells
+
+    #   x1,y1 is the starting poing to draw the cells
         self.x1 = x1
         self.y1 = y1 
         self.num_rows = num_rows
@@ -25,16 +26,16 @@ class Maze():
         
         self._cells = [[None for x in range(self.num_cols)] for y in range(self.num_rows)]
         if seed:
-            self.seed = random.seed(seed)
-        else:
-            self.seed = random.seed(0)
+            random.seed(seed)
+   
+            
+    
+
     def _create_cells(self):
         # fill self._cells, each list is a column of Cell objects
 
-        # how many cells do we need to creat?
-        # rows * column
-        # get middle of window
-        self.win.canvas.update()
+        # rows * columns
+        self.win.canvas.update() # update to get the actuall values of widget canvas
         width = self.win.canvas.winfo_width()
         height = self.win.canvas.winfo_height()
         for i in range(self.num_rows):
@@ -83,34 +84,33 @@ class Maze():
             direction = to_visit[random.randint(0, len(to_visit)-1)]            # if in different row
             if direction[0] != i:
                 if i > direction[0]:
-                    #self._cells[i][j].has_bottom_wall = False
                     self.open_top(i,j)
                 else:
-                    #self._cells[i][j].has_top_wall = False
                     self.open_bottom(i,j)
             else:
                 if j > direction[1]:
                     self.open_left(i,j)
-                    #self._cells[i][j].has_left_wall = False
                 else:
                     self.open_right(i, j)
-                    #self._cells[i][j].has_right_wall = False
             
-            #self._draw_cell(i,j)  
             self._break_walls_r(direction[0], direction[1])
        
+    
     def open_top(self, i, j):
         self._cells[i][j].has_top_wall = False
         self._draw_cell(i,j)
+    
     
     def open_bottom(self, i, j):
         self._cells[i][j].has_bottom_wall = False
         self._draw_cell(i,j)
 
+    
     def open_left(self, i, j):
         self._cells[i][j].has_left_wall = False
         self._draw_cell(i, j)
    
+    
     def open_right(self, i, j):
         self._cells[i][j].has_right_wall = False
         self._draw_cell(i,j)
@@ -132,10 +132,7 @@ def main():
     m.break_entrance_and_exit()
     m._break_walls_r(0,0)
     win.wait_for_close()
+
+
 if __name__ == "__main__":
     main()
-
-
-
-
-
