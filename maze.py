@@ -51,15 +51,14 @@ class Maze():
     def _animate(self):
        self.win.redraw()
        time.sleep(0.05)
+
     
     def break_entrance_and_exit(self):
         i = len(self._cells) - 1
         j = len(self._cells[0]) - 1
         
-        self._cells[0][0].has_bottom_wall = False
-        self._draw_cell(0,0)
-        self._cells[i][j].has_top_wall = False 
-        self._draw_cell(i,j)
+        self.open_top(0,0)
+        self.open_bottom(i,j)
     
     def _break_walls_r(self, i, j):
         self._cells[i][j].visited = True 
@@ -84,23 +83,48 @@ class Maze():
             direction = to_visit[random.randint(0, len(to_visit)-1)]            # if in different row
             if direction[0] != i:
                 if i > direction[0]:
-                    self._cells[i][j].has_bottom_wall = False
+                    #self._cells[i][j].has_bottom_wall = False
+                    self.open_top(i,j)
                 else:
-                    self._cells[i][j].has_top_wall = False
+                    #self._cells[i][j].has_top_wall = False
+                    self.open_bottom(i,j)
             else:
                 if j > direction[1]:
-                    self._cells[i][j].has_left_wall = False
+                    self.open_left(i,j)
+                    #self._cells[i][j].has_left_wall = False
                 else:
-                    self._cells[i][j].has_right_wall = False
+                    self.open_right(i, j)
+                    #self._cells[i][j].has_right_wall = False
             
-            self._draw_cell(i,j)  
+            #self._draw_cell(i,j)  
             self._break_walls_r(direction[0], direction[1])
+       
+    def open_top(self, i, j):
+        self._cells[i][j].has_top_wall = False
+        self._draw_cell(i,j)
+    
+    def open_bottom(self, i, j):
+        self._cells[i][j].has_bottom_wall = False
+        self._draw_cell(i,j)
 
-  
+    def open_left(self, i, j):
+        self._cells[i][j].has_left_wall = False
+        self._draw_cell(i, j)
+   
+    def open_right(self, i, j):
+        self._cells[i][j].has_right_wall = False
+        self._draw_cell(i,j)
+
+
+    def _reset_cells_visited(self):
+        for row in len(self._cells):
+            for column in len(row):
+                self._cells[row][colum].visited = False
+                    
 
 def main():
     win = Window(800, 600)
-    m = Maze(100,100, 10, 10, 50, 50,win )
+    m = Maze(100,100, 10, 10, 50, 50,win,seed = 140  )
     m._create_cells()
     for i in range(10):
         for j in range(10):

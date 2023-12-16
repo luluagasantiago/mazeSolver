@@ -28,7 +28,8 @@ class Tests(unittest.TestCase):
         self.assertEqual(m1._cells[0][0].has_bottom_wall, False)
         self.assertEqual(m1._cells[i][j].has_top_wall, False)
         
-
+    def test_reset_cells():
+    win = Window()
 if __name__ == "__main__":
     unittest.main()
 

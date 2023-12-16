@@ -64,38 +64,35 @@ class Cell():
         self.visited = False
 
     def draw(self):
-        bottom_left = Point(self._x1, self._y1)
-        bottom_right = Point(self._x2, self._y1)
-        upper_left = Point(self._x1, self._y2)
-        upper_right = Point(self._x2, self._y2)
+        upper_left = Point(self._x1, self._y1)
+        upper_right = Point(self._x2, self._y1)
+        bottom_left = Point(self._x1, self._y2)
+        bottom_right = Point(self._x2, self._y2)
 
+        left = Line(bottom_left, upper_left)
+        BACKGROUND = "black"  
         if self.has_left_wall:
-            left = Line(bottom_left, upper_left)
             self._win.draw_line(left, self.color)
         else:
-            left = Line(bottom_left, upper_left    )
-            self._win.draw_line(left, "white")
-
+            self._win.draw_line(left, BACKGROUND)
+                  
+        right = Line(bottom_right, upper_right)
         if self.has_right_wall:
-            right = Line(bottom_right, upper_right)
             self._win.draw_line(right, self.color)
         else:
-            right = Line(bottom_right, upper_right)
-            self._win.draw_line(right, 'white')
+            self._win.draw_line(right, BACKGROUND)
         
+        bottom = Line(bottom_left, bottom_right)
         if self.has_bottom_wall:
-            bottom = Line(bottom_left, bottom_right)
             self._win.draw_line(bottom, self.color)
         else:
-            bottom = Line(bottom_left, bottom_right)
-            self._win.draw_line(bottom, 'white')
-
+            self._win.draw_line(bottom, BACKGROUND)
+        
+        top = Line(upper_right, upper_left)
         if self.has_top_wall:
-            top = Line(upper_right, upper_left)
-            self._win.draw_line(top, self.color)
+           self._win.draw_line(top, self.color)
         else:
-            top = Line(upper_right, upper_left)
-            self._win.draw_line(top, 'white')
+           self._win.draw_line(top, BACKGROUND)
 
     def draw_move(self, to_cell, undo = False):
         p_start = Point((self._x1 + self._x2) // 2,
