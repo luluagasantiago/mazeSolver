@@ -49,7 +49,7 @@ class Line():
 
 class Cell():
 
-    def __init__(self,x1, x2, y1, y2, window, color="red"):
+    def __init__(self,x1, x2, y1, y2, window = None , color="red"):
         
         self._x1 = x1
         self._x2 = x2
@@ -71,18 +71,30 @@ class Cell():
         if self.has_left_wall:
             left = Line(bottom_left, upper_left)
             self._win.draw_line(left, self.color)
-        
+        else:
+            left = Line(bottom_left, upper_left    )
+            self._win.draw_line(left, "white")
+
         if self.has_right_wall:
             right = Line(bottom_right, upper_right)
             self._win.draw_line(right, self.color)
+        else:
+            right = Line(bottom_right, upper_right)
+            self._win.draw_line(right, 'white')
         
         if self.has_bottom_wall:
             bottom = Line(bottom_left, bottom_right)
             self._win.draw_line(bottom, self.color)
-        
+        else:
+            bottom = Line(bottom_left, bottom_right)
+            self._win.draw_line(bottom, 'white')
+
         if self.has_top_wall:
             top = Line(upper_right, upper_left)
             self._win.draw_line(top, self.color)
+        else:
+            top = Line(upper_right, upper_left)
+            self._win.draw_line(top, 'white')
 
     def draw_move(self, to_cell, undo = False):
         p_start = Point((self._x1 + self._x2) // 2,
@@ -97,7 +109,6 @@ class Cell():
         else:
             self._win.draw_line(l1, "red")
 
-        
 
 
 def main():

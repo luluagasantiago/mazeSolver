@@ -9,7 +9,7 @@ class Maze():
                 num_cols,
                 cell_size_x,
                 cell_size_y,
-                win
+                win = None
     ):
     # x1,y1 is the starting poing to draw the cells
         self.x1 = x1
@@ -21,7 +21,6 @@ class Maze():
         self.win = win
         
         self._cells = [[None for x in range(self.num_cols)] for y in range(self.num_rows)]
-        self._create_cells()      
     def _create_cells(self):
         # fill self._cells, each list is a column of Cell objects
 
@@ -45,14 +44,24 @@ class Maze():
     def _animate(self):
        self.win.redraw()
        time.sleep(0.05)
-
+    
+    def break_entrance_and_exit(self):
+        i = len(self._cells) - 1
+        j = len(self._cells[0]) - 1
+        
+        self._cells[0][0].has_bottom_wall = False
+        self._draw_cell(0,0)
+        self._cells[i][j].has_top_wall = False 
+        self._draw_cell(i,j)
 
 def main():
     win = Window(800, 600)
     m = Maze(100,100, 10, 10, 50, 50,win)
+    m._create_cells()
     for i in range(10):
         for j in range(10):
             m._draw_cell(i,j)
+    m.break_entrance_and_exit()
     win.wait_for_close()
 if __name__ == "__main__":
     main()
