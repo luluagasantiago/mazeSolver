@@ -63,14 +63,14 @@ class Cell():
         self.has_bottom_wall = True
         self.visited = False
 
-    def draw(self):
+    def draw(self, background = "black"):
         upper_left = Point(self._x1, self._y1)
         upper_right = Point(self._x2, self._y1)
         bottom_left = Point(self._x1, self._y2)
         bottom_right = Point(self._x2, self._y2)
 
         left = Line(bottom_left, upper_left)
-        BACKGROUND = "black"  
+        BACKGROUND = background  
         if self.has_left_wall:
             self._win.draw_line(left, self.color)
         else:

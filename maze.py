@@ -206,8 +206,8 @@ def main():
     #        m._draw_cell(i,j)
     m.break_entrance_and_exit()
     m._break_walls_r(0,0)
-    if m.solve():
-        print("OMG YOU DID IT!")
+    if m.solve(5,5):
+        print("FOUND THE  EXIT!")
     win.wait_for_close()
 
 
