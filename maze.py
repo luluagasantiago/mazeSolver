@@ -51,12 +51,14 @@ class Maze():
     
     def _animate(self):
        self.win.redraw()
-       time.sleep(0.01)
+       time.sleep(0.05)
 
     
     def break_entrance_and_exit(self):
-        i = len(self._cells) - 1
-        j = len(self._cells[0]) - 1
+        # end is always 
+        #self._cells[len(number_rows][number_columns]
+        i = self.num_rows - 1
+        j = self.num_cols - 1
         
         self.open_top(0,0)
         self.open_bottom(i,j)
@@ -66,19 +68,8 @@ class Maze():
         while True: 
             to_visit = []
             self._animate()
-            if i + 1 < self.num_rows:
-                if not self._cells[i+1][j].visited: 
-                    to_visit.append((i+1,j))
-            if i - 1 > 0:
-                if not self._cells[i-1][j].visited:
-                    to_visit.append((i-1, j))
-
-            if j + 1 < self.num_cols:
-                if not self._cells[i][j+1].visited: 
-                    to_visit.append((i, j+1))
-            if j - 1 > 0:
-                if not self._cells[i][j-1].visited:
-                    to_visit.append((i, j-1))
+            to_visit = self.get_unvisited_directions(i,j)
+            
             if len(to_visit) == 0:
                 self._draw_cell(i, j)
                 return
@@ -99,21 +90,31 @@ class Maze():
     
     def open_top(self, i, j):
         self._cells[i][j].has_top_wall = False
+        # have to open floor of above cell (double wall)
+        if i > 0:
+            self._cells[i-1][j].has_bottom_wall = False
         self._draw_cell(i,j)
-    
-    
+
     def open_bottom(self, i, j):
         self._cells[i][j].has_bottom_wall = False
+        if i < self.num_rows - 1:
+            self._cells[i+1][j].has_top_wall = False
         self._draw_cell(i,j)
+
 
     
     def open_left(self, i, j):
         self._cells[i][j].has_left_wall = False
+        
+        if j > 0:
+            self._cells[i][j - 1].has_right_wall = False
         self._draw_cell(i, j)
    
     
     def open_right(self, i, j):
         self._cells[i][j].has_right_wall = False
+        if j < self.num_cols - 1:
+            self._cells[i][j + 1].has_left_wall = False
         self._draw_cell(i,j)
 
 
@@ -121,19 +122,62 @@ class Maze():
         for row in self._cells:
             for cell in row:
                 cell.visited = False
-                    
+    
+    def get_unvisited_directions(self, i, j):
+        to_visit = []
+        if i + 1 < self.num_rows:
+            if not self._cells[i+1][j].visited: 
+                to_visit.append((i+1,j))
+        if i - 1 > 0:
+            if not self._cells[i-1][j].visited:
+                to_visit.append((i-1, j))
+
+        if j + 1 < self.num_cols:
+            if not self._cells[i][j+1].visited: 
+                to_visit.append((i, j+1))
+        if j - 1 > 0:
+            if not self._cells[i][j-1].visited:
+                    to_visit.append((i, j-1))
+        return to_visit 
+
+   # def without_wall(self,i0, j0, i1, j1, directions):
+        # return directions without wall in between
+        # cell 0 and cell 1
+        ## same row ?
+        #open
+        #if i0 == i1:
+         #   if i0 < i1:
+          #      if not self._cells[i0][j0].has_right_wall:
+            
+            
+
+
+    def solve(self):
+        return self._solve_r(i = 0, j = 0)
+    
+    
+    def _solve_r(self, i, j):
+        self._reset_cells_visited()
+        self._animate()
+        self._cells[i][j].visited = True
+        if i == self.num_rows - 1 and j == self.num_cols - 1:
+            return True
+        directions = self.get_unvisited_directions(i,j)
+ #       for direction in directions:
+#            if
+
+        
+         
 
 def main():
     win = Window(800, 600)
-    m = Maze(100,100, 10, 10, 50, 50,win )
+    m = Maze(100,100, 10, 10, 50, 50,win)
     m._create_cells()
-    for i in range(10):
-        for j in range(10):
-            m._draw_cell(i,j)
+    #for i in range(10):
+    #    for j in range(10):
+    #        m._draw_cell(i,j)
     m.break_entrance_and_exit()
     m._break_walls_r(0,0)
-    m._reset_cells_visited()
-    m.win.redraw()
     win.wait_for_close()
 
 
