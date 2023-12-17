@@ -51,7 +51,7 @@ class Maze():
     
     def _animate(self):
        self.win.redraw()
-       time.sleep(0.05)
+       time.sleep(0.005)
 
     
     def break_entrance_and_exit(self):
@@ -140,31 +140,59 @@ class Maze():
                     to_visit.append((i, j-1))
         return to_visit 
 
-   # def without_wall(self,i0, j0, i1, j1, directions):
+    def without_wall(self,i, j, possible_directions):
         # return directions without wall in between
         # cell 0 and cell 1
         ## same row ?
         #open
-        #if i0 == i1:
-         #   if i0 < i1:
-          #      if not self._cells[i0][j0].has_right_wall:
+        directions_without_wall = []
+        for direction in possible_directions:
+            i1 = direction[0]
+            j1 = direction[1] 
+            if i != i1:
+                if i < i1:
+                    if not self._cells[i][j].has_bottom_wall:
+                        directions_without_wall.append(direction)
+                else:
+                    if not self._cells[i][j].has_top_wall:
+                        directions_without_wall.append(direction)
+            if j != j1:
+                if j < j1:
+                    if not self._cells[i][j].has_right_wall:
+                        directions_without_wall.append(direction)
+                else:
+                    if not self._cells[i][j].has_left_wall:
+                        directions_without_wall.append(direction)
+
+
+        return directions_without_wall            
+                
             
             
 
 
-    def solve(self):
-        return self._solve_r(i = 0, j = 0)
+    def solve(self, i = 0, j = 0):
+        self._reset_cells_visited()
+        return self._solve_r(i, j)
     
     
     def _solve_r(self, i, j):
-        self._reset_cells_visited()
         self._animate()
         self._cells[i][j].visited = True
         if i == self.num_rows - 1 and j == self.num_cols - 1:
             return True
         directions = self.get_unvisited_directions(i,j)
- #       for direction in directions:
-#            if
+        directions = self.without_wall(i, j, directions)
+        for direction in directions:
+            i1 = direction[0]
+            j1 = direction[1]
+            self._cells[i][j].draw_move(self._cells[i1][j1])
+            if self._solve_r(direction[0], direction[1]):
+                return True
+            self._cells[i1][j1].draw_move(self._cells[i][j], undo = True)
+        return False
+            
+
 
         
          
@@ -178,6 +206,8 @@ def main():
     #        m._draw_cell(i,j)
     m.break_entrance_and_exit()
     m._break_walls_r(0,0)
+    if m.solve():
+        print("OMG YOU DID IT!")
     win.wait_for_close()
 
 

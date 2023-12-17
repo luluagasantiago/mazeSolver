@@ -105,7 +105,7 @@ class Cell():
         if undo:
             self._win.draw_line(l1, "gray")
         else:
-            self._win.draw_line(l1, "red")
+            self._win.draw_line(l1, "yellow")
 
 
 
